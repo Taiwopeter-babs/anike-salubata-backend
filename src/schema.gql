@@ -1,0 +1,86 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CategoryCreateDto {
+  name: String!
+}
+
+type CategoryDto {
+  id: String!
+  name: String!
+}
+
+input CategoryUpdateDto {
+  name: String!
+}
+
+"""A custom graphql string"""
+scalar GraphQLString
+
+type Mutation {
+  category(newCategory: CategoryCreateDto!): CategoryDto!
+  deleteCategory(id: String!): MutationResult!
+  deleteProduct(id: String!): MutationResult!
+  deleteVariant(id: String!): MutationResult!
+  product(newProduct: ProductCreateDto!): ProductDto!
+  updateCategory(category: CategoryUpdateDto!, id: String!): MutationResult!
+  updateProduct(id: String!, product: ProductUpdateDto!): MutationResult!
+  updateVariant(id: String!, variant: VariantUpdateDto!): MutationResult!
+  variant(newVariant: VariantCreateDto!): VariantDto!
+}
+
+type MutationResult {
+  success: Boolean!
+}
+
+input ProductCreateDto {
+  categories: [GraphQLString!]!
+  description: String!
+  title: String!
+  variants: [Int!]!
+}
+
+type ProductDto {
+  categories: [GraphQLString!]!
+  description: String!
+  id: String!
+  title: String!
+  variants: [Int!]!
+}
+
+input ProductUpdateDto {
+  categories: [CategoryCreateDto!]
+  description: String
+  title: String
+  variants: [VariantCreateDto!]
+}
+
+input ProductsParamsDto {
+  pageNumber: Int
+  pageSize: Int
+  searchString: String
+  sortString: String
+}
+
+type Query {
+  categories: [CategoryDto!]!
+  category(id: String!): CategoryDto!
+  product(id: String!): ProductDto!
+  products(productParameters: ProductsParamsDto): [ProductDto!]!
+  variant(id: String!): VariantDto!
+  variants: [VariantDto!]!
+}
+
+input VariantCreateDto {
+  size: Int!
+}
+
+type VariantDto {
+  id: String!
+  size: Int!
+}
+
+input VariantUpdateDto {
+  size: Int!
+}

@@ -4,6 +4,8 @@ import { Variant } from './variant.schema';
 import { Model } from 'mongoose';
 import MongooseSerializerInterceptor from '../utils/interceptors/mongoose.interceptor';
 import { VariantCreateDto, VariantUpdateDto } from './variant.dto';
+import { VariantNotFoundException } from '../utils/exceptions/notFound.exception';
+import { VariantAlreadyExistsException } from '../utils/exceptions/badRequest.exception';
 
 /**
  * The repository for the variant.
@@ -19,8 +21,9 @@ export class VariantRepository {
 
   public async createVariant(variantDto: VariantCreateDto) {
     const isVariant = await this.findVariantBySize(variantDto.size);
-    // throw exception here
+
     if (isVariant) {
+      throw new VariantAlreadyExistsException(variantDto.size);
     }
     const variant = await this.variantModel.create(variantDto);
 
@@ -40,28 +43,19 @@ export class VariantRepository {
   }
 
   public async updateVariant(id: string, variantDto: VariantUpdateDto) {
-    const isVariant = await this.findVariantById(id);
+    await this.findVariantById(id);
 
-    if (!isVariant) {
-      return false;
-    }
-
-    const result = await this.variantModel.updateOne(
-      { id: id },
-      { size: variantDto.size },
-    );
+    const result = await this.variantModel
+      .updateOne({ _id: id }, { size: variantDto.size })
+      .exec();
 
     return result.acknowledged;
   }
 
   public async deleteVariant(id: string) {
-    const isVariant = await this.findVariantById(id);
+    await this.findVariantById(id);
 
-    if (!isVariant) {
-      return false;
-    }
-
-    const result = await this.variantModel.deleteOne({ id: id });
+    const result = await this.variantModel.deleteOne({ _id: id }).exec();
 
     return result.acknowledged;
   }
@@ -74,6 +68,10 @@ export class VariantRepository {
 
   private async findVariantById(variantId: string) {
     const variant = await this.variantModel.findById(variantId).exec();
+
+    if (!variant) {
+      throw new VariantNotFoundException(variantId);
+    }
 
     return variant;
   }

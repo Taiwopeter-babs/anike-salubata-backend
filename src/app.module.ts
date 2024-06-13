@@ -11,43 +11,58 @@ import configuration from './utils/configuration';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
+import { CustomStringScalar } from './utils/customScalars';
+import { GraphQLFormattedError } from 'graphql';
 
 @Module({
   imports: [
+    // CONFIG MODULE
     ConfigModule.forRoot({
       load: [configuration],
       cache: true,
       isGlobal: true,
     }),
+
+    // MONGOOSE MODULE
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const username = configService.get('MONGO_USERNAME');
-        const password = configService.get('MONGO_PASSWORD');
-        const database = configService.get('MONGO_DATABASE');
-        const host = configService.get('MONGO_HOST');
-
-        return {
-          uri: `mongodb://${username}:${password}@${host}`,
-          dbName: database,
-          autoIndex: configService.get<string>('NODE_ENV') === 'development',
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_URI'),
+        dbName: configService.get<string>('MONGO_DATABASE'),
+        autoIndex: configService.get<string>('NODE_ENV') === 'development',
+      }),
     }),
+
+    // GRAPHQL MODULE
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const nodeEnv = configService.get<string>('NODE_ENV');
+      driver: ApolloDriver,
+      useFactory: (configService: ConfigService) => ({
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        playground: configService.get<string>('NODE_ENV') === 'development',
+        sortSchema: true,
+        resolvers: { GraphQLString: CustomStringScalar },
+        // format graphql error
+        formatError: (error) => {
+          const originalError: GraphQLFormattedError | null = error.extensions
+            ?.originalError as unknown as GraphQLFormattedError | null;
 
-        return {
-          driver: ApolloDriver,
-          autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-          playground: nodeEnv === 'development',
-          sortSchema: true,
-        };
-      },
+          if (originalError !== null) {
+            return {
+              message: error.message,
+              error: originalError?.message,
+              code: error.extensions?.code,
+            };
+          }
+          console.log(error);
+          return {
+            message: error.message,
+            path: error.path,
+          };
+        },
+      }),
     }),
     ProductModule,
     CategoryModule,

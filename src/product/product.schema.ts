@@ -1,24 +1,28 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-import { Category } from '../category/category.schema';
+import { HydratedDocument } from 'mongoose';
+
 import { BaseSchema } from '../utils/base.schema';
-import { Variant } from '../variant/variant.schema';
 
 @Schema()
-export class Product extends BaseSchema {
-  @Prop()
+export class ProductModel extends BaseSchema {
+  @Prop({ required: true, index: true })
   title: string;
 
-  @Prop()
+  @Prop({ required: true })
   description: string;
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: Variant.name }])
-  variants: Variant[];
+  @Prop()
+  variants: number[];
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: Category.name }])
-  categories: Category[];
+  @Prop()
+  categories: string[];
 }
 
-export type ProductDocument = HydratedDocument<Product>;
+export type ProductDocument = HydratedDocument<ProductModel>;
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
+const ProductSchema = SchemaFactory.createForClass(ProductModel);
+
+// Add index to description
+ProductSchema.index({ description: 'text' });
+
+export { ProductSchema };

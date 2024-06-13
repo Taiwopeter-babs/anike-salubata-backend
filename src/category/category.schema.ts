@@ -4,7 +4,7 @@ import { BaseSchema } from '../utils/base.schema';
 
 @Schema()
 export class Category extends BaseSchema {
-  @Prop()
+  @Prop({ index: true })
   name: string;
 }
 

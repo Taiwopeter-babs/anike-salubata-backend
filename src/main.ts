@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ICorsConfig } from './utils/types';
 import { ValidationPipe } from '@nestjs/common';
+import { GrapqlHttpExceptionFilter } from './utils/exceptions/graphql.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,9 +15,10 @@ async function bootstrap() {
   app.enableCors(corsConfig);
 
   // global path prefix and versioning
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('api/v1/graphql');
 
-  // global validation pipe
+  // global error handler validation pipe
+  app.useGlobalFilters(new GrapqlHttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   await app.listen(3000);

@@ -9,8 +9,11 @@ export class Variant {
   size: number;
 }
 
+/**
+ * Mutation type for delete and update mutation requests
+ */
 @ObjectType()
 export class MutationResult {
-  @Field({ nullable: true })
+  @Field({ nullable: false })
   success?: boolean;
 }
