@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ProductRepository } from './product.repository';
-import {
-  ProductCreateDto,
-  ProductDto,
-  ProductUpdateDto,
-  ProductsParamsDto,
-} from './product.dto';
+import { ProductCreateDto, ProductDto, ProductUpdateDto } from './product.dto';
 import { ProductModel } from './product.schema';
+import { RequestParamsDto } from '../shared/dataTransferObjects';
 
 @Injectable()
 export class ProductService {
@@ -26,7 +22,7 @@ export class ProductService {
     return ProductDto.fromEntity(product);
   }
 
-  public async getProducts(productParams: ProductsParamsDto | null) {
+  public async getProducts(productParams: RequestParamsDto | null) {
     const products = (await this.productRepo.getProducts(
       productParams,
     )) as ProductModel[];

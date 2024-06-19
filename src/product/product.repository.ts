@@ -4,13 +4,12 @@ import { ProductModel } from './product.schema';
 import { FilterQuery, Model } from 'mongoose';
 import MongooseSerializerInterceptor from '../utils/interceptors/mongoose.interceptor';
 
-import {
-  ProductCreateDto,
-  ProductUpdateDto,
-  ProductsParamsDto,
-} from './product.dto';
+import { RequestParamsDto } from '../shared/dataTransferObjects';
+
+import { ProductCreateDto, ProductUpdateDto } from './product.dto';
 import { ProductNotFoundException } from '../utils/exceptions/notFound.exception';
 import { ProductAlreadyExistsException } from '../utils/exceptions/badRequest.exception';
+import { ServerErrorException } from '../utils/exceptions/server.exception';
 
 /**
  * The repository for the Product.
@@ -27,18 +26,19 @@ export class ProductRepository {
 
   public async createProduct(productDto: ProductCreateDto) {
     try {
-      const isProduct = await this.findProductByName(productDto.title);
-
-      console.log(isProduct);
+      const isProduct = await this.findProductByCondition({
+        name: productDto.title,
+      });
 
       if (isProduct) {
         throw new ProductAlreadyExistsException(productDto.title);
       }
+
       const product = await this.productModel.create(productDto);
 
       return product as ProductModel;
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 
@@ -49,7 +49,7 @@ export class ProductRepository {
   }
 
   public async getProducts(
-    productParams: ProductsParamsDto | null,
+    productParams: RequestParamsDto | null,
   ): Promise<ProductModel[] | void> {
     try {
       const searchString = productParams ? productParams.searchString : '';
@@ -73,48 +73,80 @@ export class ProductRepository {
 
       return products as ProductModel[];
     } catch (error) {
-      console.error(error);
+      throw new ServerErrorException(
+        `An error occured within ${this.getProducts.name}: ${error.message}`,
+      );
     }
   }
 
   public async updateProduct(id: string, productDto: ProductUpdateDto) {
-    await this.findProductById(id);
+    try {
+      await this.findProductById(id);
 
-    const result = await this.productModel
-      .updateOne({ _id: id }, { ...productDto })
-      .exec();
+      const result = await this.productModel
+        .updateOne({ _id: id }, { ...productDto })
+        .exec();
 
-    return result.acknowledged;
+      return result.acknowledged;
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async deleteProduct(id: string) {
-    await this.findProductById(id);
+    try {
+      await this.findProductById(id);
 
-    const result = await this.productModel.deleteOne({ _id: id }).exec();
+      const result = await this.productModel.deleteOne({ _id: id }).exec();
 
-    return result.acknowledged;
+      return result.acknowledged;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  private async findProductByName(productTitle: string) {
-    const product = await this.productModel
-      .findOne({ name: productTitle })
-      .collation({ locale: 'en', strength: 2 }) // added for case-insensitive search
-      .exec();
+  // private async findProductByName(productTitle: string) {
+  //   const product = await this.findProductByCondition({ name: productTitle });
 
-    return product;
+  //   return product;
+  // }
+
+  private async findProductByCondition(condition: FilterQuery<ProductModel>) {
+    try {
+      const product = await this.productModel
+        .findOne(condition)
+        .collation({ locale: 'en', strength: 2 }) // added for case-insensitive search
+        .exec();
+
+      return product;
+    } catch (error) {
+      throw new ServerErrorException(
+        `An error occured within ${this.findProductByCondition.name}: ${error.message}`,
+      );
+    }
   }
 
   private async findProductById(ProductId: string) {
-    const product = await this.productModel.findById(ProductId).exec();
+    try {
+      const product = await this.productModel.findById(ProductId).exec();
 
-    if (!product) {
-      throw new ProductNotFoundException(ProductId);
+      if (!product) {
+        throw new ProductNotFoundException(ProductId);
+      }
+
+      return product;
+    } catch (error) {
+      if (error.name === 'ProductNotFoundException') {
+        throw error;
+      }
+
+      throw new ServerErrorException(
+        `An error occured within ${this.findProductById.name}: ${error.message}`,
+      );
     }
-
-    return product;
   }
 
-  private getPageParams(params: ProductsParamsDto | null) {
+  private getPageParams(params: RequestParamsDto | null) {
     if (!params) {
       return { skip: 0, pageSize: 20 };
     }

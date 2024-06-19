@@ -4,7 +4,6 @@ import {
   IsDefined,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -99,27 +98,4 @@ export class ProductDto {
 
     return dto;
   }
-}
-
-@InputType()
-export class ProductsParamsDto {
-  @Field(() => Int, { nullable: true })
-  @IsNumber()
-  @IsOptional()
-  pageNumber?: number;
-
-  @Field(() => Int, { nullable: true })
-  @IsNumber()
-  @IsOptional()
-  pageSize?: number;
-
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  searchString?: string;
-
-  @Field({ nullable: true })
-  @IsString()
-  @IsOptional()
-  sortString?: string;
 }

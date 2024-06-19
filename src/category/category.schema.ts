@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { BaseSchema } from '../utils/base.schema';
+import { BaseSchema } from '../shared/base.schema';
 
 @Schema()
 export class Category extends BaseSchema {

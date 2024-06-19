@@ -13,6 +13,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CustomStringScalar } from './utils/customScalars';
 import { GraphQLFormattedError } from 'graphql';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { GraphQLFormattedError } from 'graphql';
     ProductModule,
     CategoryModule,
     VariantModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

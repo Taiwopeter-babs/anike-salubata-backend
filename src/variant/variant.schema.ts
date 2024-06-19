@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, ObjectId } from 'mongoose';
 import { Transform } from 'class-transformer';
-import { BaseSchema } from '../utils/base.schema';
+import { BaseSchema } from '../shared/base.schema';
 
 @Schema()
 export class Variant extends BaseSchema {

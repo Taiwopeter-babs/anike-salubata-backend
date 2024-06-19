@@ -11,13 +11,10 @@ import { MutationResult } from '../variant/variant.graphql';
 
 import { ProductService } from './product.service';
 
-import {
-  ProductCreateDto,
-  ProductDto,
-  ProductUpdateDto,
-  ProductsParamsDto,
-} from './product.dto';
+import { ProductCreateDto, ProductDto, ProductUpdateDto } from './product.dto';
+
 import { CustomStringScalar } from '../utils/customScalars';
+import { RequestParamsDto } from '../shared/dataTransferObjects';
 
 @Resolver(() => ProductDto)
 export class ProductResolver {
@@ -33,7 +30,7 @@ export class ProductResolver {
   @Query(() => [ProductDto], { name: 'products' })
   async getProducts(
     @Args('productParameters', { nullable: true })
-    productParams: ProductsParamsDto,
+    productParams: RequestParamsDto,
   ) {
     const products = await this.productService.getProducts(productParams);
 
