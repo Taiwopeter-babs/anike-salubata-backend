@@ -2,10 +2,13 @@ import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Variant } from './variant.schema';
 import { Model } from 'mongoose';
-import MongooseSerializerInterceptor from '../utils/interceptors/mongoose.interceptor';
+import {
+  MongooseSerializerInterceptor,
+  VariantAlreadyExistsException,
+  VariantNotFoundException,
+} from '@utils';
+
 import { VariantCreateDto, VariantUpdateDto } from './variant.dto';
-import { VariantNotFoundException } from '../utils/exceptions/notFound.exception';
-import { VariantAlreadyExistsException } from '../utils/exceptions/badRequest.exception';
 
 /**
  * The repository for the variant.

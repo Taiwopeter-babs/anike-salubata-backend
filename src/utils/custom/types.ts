@@ -1,7 +1,8 @@
 import { FilterQuery } from 'mongoose';
-import { OrderModel } from '../order/order.schema';
-import { RequestParamsDto } from '../shared/dataTransferObjects';
-import { ProductModel } from '../product/product.schema';
+
+import { OrderModel } from '@order';
+import { RequestParamsDto } from '@shared';
+import { ProductModel } from '@product';
 
 export interface ICorsConfig {
   methods: string | string;

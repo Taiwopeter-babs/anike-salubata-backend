@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { ICorsConfig } from './utils/types';
 import { ValidationPipe } from '@nestjs/common';
-import { GrapqlHttpExceptionFilter } from './utils/exceptions/graphql.exception';
+
+import { ICorsConfig, GrapqlHttpExceptionFilter } from '@utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

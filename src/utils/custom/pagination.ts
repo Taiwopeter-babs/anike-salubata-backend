@@ -1,4 +1,4 @@
-import { RequestParamsDto } from '../shared/dataTransferObjects';
+import { RequestParamsDto } from '@shared';
 
 export function getPageParams(params?: RequestParamsDto | null) {
   if (!params) {
