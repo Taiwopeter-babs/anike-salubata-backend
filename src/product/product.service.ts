@@ -3,7 +3,7 @@ import { ProductRepository } from './product.repository';
 import { ProductCreateDto, ProductDto, ProductUpdateDto } from './product.dto';
 import { ProductModel } from './product.schema';
 
-import { IProductQuery } from 'src/utils/types';
+import { IProductQuery } from '@utils';
 
 @Injectable()
 export class ProductService {

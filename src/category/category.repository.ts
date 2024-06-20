@@ -2,11 +2,11 @@ import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category } from './category.schema';
 import { Model } from 'mongoose';
-import MongooseSerializerInterceptor from '../utils/interceptors/mongoose.interceptor';
+import { MongooseSerializerInterceptor } from '@utils';
 
 import { CategoryCreateDto, CategoryUpdateDto } from './category.dto';
-import { CategoryNotFoundException } from '../utils/exceptions/notFound.exception';
-import { CategoryAlreadyExistsException } from '../utils/exceptions/badRequest.exception';
+import { CategoryNotFoundException } from '@utils/exceptions/notFound.exception';
+import { CategoryAlreadyExistsException } from '@utils/exceptions/badRequest.exception';
 
 /**
  * The repository for the category.

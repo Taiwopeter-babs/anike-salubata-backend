@@ -1,5 +1,5 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { CustomStringScalar } from '../utils/customScalars';
+import { CustomStringScalar } from '../utils/custom/customScalars';
 
 @ObjectType()
 export class Product {

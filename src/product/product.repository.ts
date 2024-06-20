@@ -2,16 +2,19 @@ import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProductModel } from './product.schema';
 import mongoose, { FilterQuery, Model } from 'mongoose';
-import MongooseSerializerInterceptor from '../utils/interceptors/mongoose.interceptor';
 
-import { RequestParamsDto } from '../shared/dataTransferObjects';
+import { RequestParamsDto } from '@shared/dataTransferObjects';
 
 import { ProductCreateDto, ProductUpdateDto } from './product.dto';
-import { ProductNotFoundException } from '../utils/exceptions/notFound.exception';
-import { ProductAlreadyExistsException } from '../utils/exceptions/badRequest.exception';
-import { ServerErrorException } from '../utils/exceptions/server.exception';
-import { IProductQuery } from '../utils/types';
-import { getPageParams } from '../utils/pagination';
+
+import {
+  IProductQuery,
+  getPageParams,
+  ServerErrorException,
+  ProductAlreadyExistsException,
+  ProductNotFoundException,
+  MongooseSerializerInterceptor,
+} from '@utils';
 
 /**
  * The repository for the Product.
@@ -98,8 +101,6 @@ export class ProductRepository {
           _id: { $in: arrayObjectId },
         })
         .exec();
-
-      console.log(products);
 
       return products;
     } catch (error) {

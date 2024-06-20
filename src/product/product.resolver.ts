@@ -7,14 +7,14 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { MutationResult } from '../variant/variant.graphql';
+import { MutationResult } from '@variant/variant.graphql';
 
 import { ProductService } from './product.service';
 
 import { ProductCreateDto, ProductDto, ProductUpdateDto } from './product.dto';
 
-import { CustomStringScalar } from '../utils/customScalars';
-import { RequestParamsDto } from '../shared/dataTransferObjects';
+import { CustomStringScalar } from '@utils/custom/customScalars';
+import { RequestParamsDto } from '@shared';
 
 @Resolver(() => ProductDto)
 export class ProductResolver {

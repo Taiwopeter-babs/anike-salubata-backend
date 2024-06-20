@@ -16,6 +16,20 @@
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@category/*": ["./src/category/*"],
+      "@category": ["./src/category"],
+      "@order/*": ["./src/order/*"],
+      "@order": ["./src/order"],
+      "@product/*": ["./src/product/*"],
+      "@product": ["./src/product"],
+      "@shared/*": ["./src/shared/*"],
+      "@shared": ["./src/shared"],
+      "@utils/*": ["./src/utils/*"],
+      "@utils": ["./src/utils"],
+      "@variant/*": ["./src/variant/*"],
+      "@variant": ["./src/variant"]
+    }
   }
 }

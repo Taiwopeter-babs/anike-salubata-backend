@@ -7,11 +7,11 @@ import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { VariantModule } from './variant/variant.module';
 
-import configuration from './utils/configuration';
+import configuration from './utils/custom/configuration';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { CustomStringScalar } from './utils/customScalars';
+import { CustomStringScalar } from './utils/custom/customScalars';
 import { GraphQLFormattedError } from 'graphql';
 import { OrderModule } from './order/order.module';
 
@@ -20,7 +20,9 @@ import { OrderModule } from './order/order.module';
     // CONFIG MODULE
     ConfigModule.forRoot({
       load: [configuration],
+
       cache: true,
+
       isGlobal: true,
     }),
 
@@ -40,16 +42,21 @@ import { OrderModule } from './order/order.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       driver: ApolloDriver,
+
       useFactory: (configService: ConfigService) => ({
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+
         playground: configService.get<string>('NODE_ENV') === 'development',
+
         sortSchema: true,
+
         resolvers: { GraphQLString: CustomStringScalar },
+
         // format graphql error
         formatError: (error) => {
-          const originalError: GraphQLFormattedError | null = error.extensions
+          const originalError = error.extensions
             ?.originalError as unknown as GraphQLFormattedError | null;
-          console.error(error);
+
           if (originalError !== null) {
             return {
               message: error.message,
@@ -57,7 +64,7 @@ import { OrderModule } from './order/order.module';
               code: error.extensions?.code,
             };
           }
-          console.log(error);
+
           return {
             message: error.message,
             path: error.path,

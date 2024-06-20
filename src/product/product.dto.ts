@@ -11,7 +11,7 @@ import { ProductModel } from './product.schema';
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { CategoryCreateDto } from '../category/category.dto';
 import { VariantCreateDto } from '../variant/variant.dto';
-import { CustomStringScalar } from 'src/utils/customScalars';
+import { CustomStringScalar } from '@utils/custom/customScalars';
 
 @InputType()
 export class ProductCreateDto {
