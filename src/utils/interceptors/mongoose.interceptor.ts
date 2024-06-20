@@ -12,7 +12,9 @@ type SerializerType = typeof ClassSerializerInterceptor;
 /**
  * Serialize mongoose document to javascript class
  */
-function MongooseSerializerInterceptor(classToIntercept: Type): SerializerType {
+export function MongooseSerializerInterceptor(
+  classToIntercept: Type,
+): SerializerType {
   return class MongooseInterceptor extends ClassSerializerInterceptor {
     private changeMongooseObjectToClass(document: PlainLiteralObject) {
       if (!(document instanceof Document)) return document;
@@ -37,5 +39,3 @@ function MongooseSerializerInterceptor(classToIntercept: Type): SerializerType {
     }
   };
 }
-
-export default MongooseSerializerInterceptor;
