@@ -1,7 +1,7 @@
 import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProductModel } from './product.schema';
-import { FilterQuery, Model } from 'mongoose';
+import mongoose, { FilterQuery, Model } from 'mongoose';
 import MongooseSerializerInterceptor from '../utils/interceptors/mongoose.interceptor';
 
 import { RequestParamsDto } from '../shared/dataTransferObjects';
@@ -10,6 +10,8 @@ import { ProductCreateDto, ProductUpdateDto } from './product.dto';
 import { ProductNotFoundException } from '../utils/exceptions/notFound.exception';
 import { ProductAlreadyExistsException } from '../utils/exceptions/badRequest.exception';
 import { ServerErrorException } from '../utils/exceptions/server.exception';
+import { IProductQuery } from '../utils/types';
+import { getPageParams } from '../utils/pagination';
 
 /**
  * The repository for the Product.
@@ -49,14 +51,18 @@ export class ProductRepository {
   }
 
   public async getProducts(
-    productParams: RequestParamsDto | null,
+    params?: IProductQuery,
   ): Promise<ProductModel[] | void> {
     try {
-      const searchString = productParams ? productParams.searchString : '';
+      const { requestParams, condition } = params ?? {};
 
-      const pageParams = this.getPageParams(productParams);
+      const searchString = requestParams ? requestParams.searchString : '';
 
-      const filter: FilterQuery<ProductModel> = {};
+      const pageParams = getPageParams(requestParams);
+
+      const filter: FilterQuery<ProductModel> = condition
+        ? { ...condition }
+        : {};
 
       // Add search
       if (searchString !== undefined) {
@@ -69,9 +75,33 @@ export class ProductRepository {
         .skip(pageParams.skip)
         .limit(pageParams.pageSize);
 
-      const products = await findQuery;
+      const products = await findQuery.exec();
 
       return products as ProductModel[];
+    } catch (error) {
+      throw new ServerErrorException(
+        `An error occured within ${this.getProducts.name}: ${error.message}`,
+      );
+    }
+  }
+
+  public async getProductsFromIdArray(
+    idsList: string[],
+  ): Promise<ProductModel[] | void> {
+    try {
+      const arrayObjectId = idsList.map(
+        (id) => new mongoose.Types.ObjectId(id),
+      );
+
+      const products = await this.productModel
+        .find({
+          _id: { $in: arrayObjectId },
+        })
+        .exec();
+
+      console.log(products);
+
+      return products;
     } catch (error) {
       throw new ServerErrorException(
         `An error occured within ${this.getProducts.name}: ${error.message}`,
@@ -104,12 +134,6 @@ export class ProductRepository {
       throw error;
     }
   }
-
-  // private async findProductByName(productTitle: string) {
-  //   const product = await this.findProductByCondition({ name: productTitle });
-
-  //   return product;
-  // }
 
   private async findProductByCondition(condition: FilterQuery<ProductModel>) {
     try {

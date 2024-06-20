@@ -32,7 +32,9 @@ export class ProductResolver {
     @Args('productParameters', { nullable: true })
     productParams: RequestParamsDto,
   ) {
-    const products = await this.productService.getProducts(productParams);
+    const products = await this.productService.getProducts({
+      requestParams: productParams,
+    });
 
     return products;
   }

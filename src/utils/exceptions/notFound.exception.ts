@@ -23,3 +23,9 @@ export class ProductNotFoundException extends NotFoundException {
     super(`Product with the id: ${productId}, was not found`);
   }
 }
+
+export class OrderNotFoundException extends NotFoundException {
+  constructor(orderId: string) {
+    super(`Order with the id: ${orderId}, was not found`);
+  }
+}

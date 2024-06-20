@@ -21,8 +21,10 @@ scalar GraphQLString
 type Mutation {
   category(newCategory: CategoryCreateDto!): CategoryDto!
   deleteCategory(id: String!): MutationResult!
+  deleteOrder(id: String!): MutationResult!
   deleteProduct(id: String!): MutationResult!
   deleteVariant(id: String!): MutationResult!
+  order(newOrder: OrderCreateDto!): OrderDto!
   product(newProduct: ProductCreateDto!): ProductDto!
   updateCategory(category: CategoryUpdateDto!, id: String!): MutationResult!
   updateProduct(id: String!, product: ProductUpdateDto!): MutationResult!
@@ -32,6 +34,18 @@ type Mutation {
 
 type MutationResult {
   success: Boolean!
+}
+
+input OrderCreateDto {
+  products: [GraphQLString!]!
+  userId: Int!
+}
+
+type OrderDto {
+  id: String!
+  products: [ProductDto!]!
+  trackingId: String!
+  userId: String!
 }
 
 input ProductCreateDto {
@@ -56,20 +70,23 @@ input ProductUpdateDto {
   variants: [VariantCreateDto!]
 }
 
-input ProductsParamsDto {
+type Query {
+  categories: [CategoryDto!]!
+  category(id: String!): CategoryDto!
+  order(id: String!): OrderDto!
+  orderByTrackingId(trackingId: String!): OrderDto!
+  orders(orderParameters: RequestParamsDto): [OrderDto!]!
+  product(id: String!): ProductDto!
+  products(productParameters: RequestParamsDto): [ProductDto!]!
+  variant(id: String!): VariantDto!
+  variants: [VariantDto!]!
+}
+
+input RequestParamsDto {
   pageNumber: Int
   pageSize: Int
   searchString: String
   sortString: String
-}
-
-type Query {
-  categories: [CategoryDto!]!
-  category(id: String!): CategoryDto!
-  product(id: String!): ProductDto!
-  products(productParameters: ProductsParamsDto): [ProductDto!]!
-  variant(id: String!): VariantDto!
-  variants: [VariantDto!]!
 }
 
 input VariantCreateDto {

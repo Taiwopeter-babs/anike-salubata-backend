@@ -49,7 +49,7 @@ import { OrderModule } from './order/order.module';
         formatError: (error) => {
           const originalError: GraphQLFormattedError | null = error.extensions
             ?.originalError as unknown as GraphQLFormattedError | null;
-
+          console.error(error);
           if (originalError !== null) {
             return {
               message: error.message,

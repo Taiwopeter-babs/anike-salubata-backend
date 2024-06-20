@@ -12,5 +12,6 @@ import { ProductRepository } from './product.repository';
     ]),
   ],
   providers: [ProductResolver, ProductService, ProductRepository],
+  exports: [ProductService],
 })
 export class ProductModule {}

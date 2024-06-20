@@ -1,6 +1,6 @@
 import { GraphQLScalarType } from 'graphql';
 
-const regex = /^[A-Za-z]+$/;
+const regex = /^[A-Za-z0-9]+$/;
 
 function validate(stringValue: any): string | never {
   if (typeof stringValue !== 'string' || !regex.test(stringValue)) {

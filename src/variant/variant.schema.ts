@@ -1,13 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, ObjectId } from 'mongoose';
-import { Transform } from 'class-transformer';
+import { HydratedDocument } from 'mongoose';
+
 import { BaseSchema } from '../shared/base.schema';
 
 @Schema()
 export class Variant extends BaseSchema {
-  @Transform(({ value }) => value.toString())
-  _id: ObjectId;
-
   @Prop({ required: true })
   size: number;
 }
