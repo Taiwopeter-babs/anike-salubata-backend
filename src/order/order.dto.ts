@@ -9,7 +9,7 @@ import {
 
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 
-import { CustomStringScalar } from '../utils/customScalars';
+import { CustomStringScalar } from '../utils/custom/customScalars';
 import { OrderModel } from './order.schema';
 import { ProductDto } from '../product/product.dto';
 

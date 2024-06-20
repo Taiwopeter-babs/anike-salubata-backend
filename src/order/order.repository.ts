@@ -2,15 +2,17 @@ import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { FilterQuery, Model } from 'mongoose';
-import MongooseSerializerInterceptor from '../utils/interceptors/mongoose.interceptor';
 
-import { OrderNotFoundException } from '../utils/exceptions/notFound.exception';
-import { ServerErrorException } from '../utils/exceptions/server.exception';
+import {
+  OrderNotFoundException,
+  ServerErrorException,
+  IOrderQuery,
+  getPageParams,
+  MongooseSerializerInterceptor,
+} from '@utils';
 
 import { OrderModel } from './order.schema';
 import { OrderCreateDto } from './order.dto';
-import { IOrderQuery } from '../utils/types';
-import { getPageParams } from '../utils/pagination';
 
 /**
  * The repository for the Product.

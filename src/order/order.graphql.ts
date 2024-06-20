@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Product } from '../product/product.graphql';
 import { ProductDto } from 'src/product/product.dto';
-import { CustomStringScalar } from 'src/utils/customScalars';
+import { CustomStringScalar } from '@utils/custom/customScalars';
 
 @ObjectType()
 export class Order {

@@ -6,15 +6,15 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { MutationResult } from '../variant/variant.graphql';
+import { MutationResult } from '@variant/variant.graphql';
 
 import { OrderCreateDto, OrderDto } from './order.dto';
 import { OrderService } from './order.service';
 
-import { ProductDto } from '../product/product.dto';
-import { ProductService } from '../product/product.service';
+import { ProductDto } from '@product/product.dto';
+import { ProductService } from '@product/product.service';
 
-import { RequestParamsDto } from 'src/shared/dataTransferObjects';
+import { RequestParamsDto } from '@shared';
 import { OrderModel } from './order.schema';
 
 @Resolver(() => OrderDto)

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { OrderRepository } from './order.repository';
 import { OrderCreateDto, OrderDto } from './order.dto';
 import { OrderModel } from './order.schema';
-import { IGetOrders, IOrderQuery } from 'src/utils/types';
+import { IGetOrders, IOrderQuery } from '@utils';
 
 @Injectable()
 export class OrderService {
