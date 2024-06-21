@@ -4,11 +4,11 @@ import { HydratedDocument } from 'mongoose';
 import { BaseSchema } from '../shared/base.schema';
 
 @Schema()
-export class Variant extends BaseSchema {
+export class VariantModel extends BaseSchema {
   @Prop({ required: true })
   size: number;
 }
 
-export type VariantDocument = HydratedDocument<Variant>;
+export type VariantDocument = HydratedDocument<VariantModel>;
 
-export const VariantSchema = SchemaFactory.createForClass(Variant);
+export const VariantSchema = SchemaFactory.createForClass(VariantModel);

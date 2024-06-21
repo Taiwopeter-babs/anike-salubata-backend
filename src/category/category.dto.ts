@@ -1,6 +1,6 @@
 import { Expose, plainToInstance } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Category } from './category.schema';
+import { CategoryModel } from './category.schema';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
 @InputType()
@@ -24,7 +24,7 @@ export class CategoryDto {
   @Field()
   public name: string;
 
-  static fromEntity(entity: Category): CategoryDto {
+  static fromEntity(entity: CategoryModel): CategoryDto {
     const dto = plainToInstance(CategoryDto, entity);
 
     return dto;

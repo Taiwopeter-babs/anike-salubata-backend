@@ -3,11 +3,11 @@ import { HydratedDocument } from 'mongoose';
 import { BaseSchema } from '../shared/base.schema';
 
 @Schema()
-export class Category extends BaseSchema {
+export class CategoryModel extends BaseSchema {
   @Prop({ index: true })
   name: string;
 }
 
-export type CategoryDocument = HydratedDocument<Category>;
+export type CategoryDocument = HydratedDocument<CategoryModel>;
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const CategorySchema = SchemaFactory.createForClass(CategoryModel);

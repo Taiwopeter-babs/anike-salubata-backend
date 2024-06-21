@@ -1,6 +1,6 @@
 import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Variant } from './variant.schema';
+import { VariantModel } from './variant.schema';
 import { Model } from 'mongoose';
 import {
   MongooseSerializerInterceptor,
@@ -15,11 +15,12 @@ import { VariantCreateDto, VariantUpdateDto } from './variant.dto';
  * All the mongoose document type returned are converted to the `Variant` type class
  * by the interceptor.
  */
-@UseInterceptors(MongooseSerializerInterceptor(Variant))
+@UseInterceptors(MongooseSerializerInterceptor(VariantModel))
 @Injectable()
 export class VariantRepository {
   constructor(
-    @InjectModel(Variant.name) private readonly variantModel: Model<Variant>,
+    @InjectModel(VariantModel.name)
+    private readonly variantModel: Model<VariantModel>,
   ) {}
 
   public async createVariant(variantDto: VariantCreateDto) {
@@ -30,19 +31,19 @@ export class VariantRepository {
     }
     const variant = await this.variantModel.create(variantDto);
 
-    return variant as Variant;
+    return variant as VariantModel;
   }
 
-  public async getVariant(variantId: string): Promise<Variant> {
+  public async getVariant(variantId: string): Promise<VariantModel> {
     const variant = await this.findVariantById(variantId);
 
-    return variant as Variant;
+    return variant as VariantModel;
   }
 
-  public async getVariants(): Promise<Variant[]> {
+  public async getVariants(): Promise<VariantModel[]> {
     const variants = await this.variantModel.find();
 
-    return variants as Variant[];
+    return variants as VariantModel[];
   }
 
   public async updateVariant(id: string, variantDto: VariantUpdateDto) {

@@ -1,6 +1,6 @@
 import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Category } from './category.schema';
+import { CategoryModel } from './category.schema';
 import { Model } from 'mongoose';
 import { MongooseSerializerInterceptor } from '@utils';
 
@@ -13,11 +13,12 @@ import { CategoryAlreadyExistsException } from '@utils/exceptions/badRequest.exc
  * All the mongoose document type returned are converted to the `Category` type class
  * by the interceptor.
  */
-@UseInterceptors(MongooseSerializerInterceptor(Category))
+@UseInterceptors(MongooseSerializerInterceptor(CategoryModel))
 @Injectable()
 export class CategoryRepository {
   constructor(
-    @InjectModel(Category.name) private readonly categoryModel: Model<Category>,
+    @InjectModel(CategoryModel.name)
+    private readonly categoryModel: Model<CategoryModel>,
   ) {}
 
   public async createCategory(categoryDto: CategoryCreateDto) {
@@ -28,19 +29,19 @@ export class CategoryRepository {
     }
     const category = await this.categoryModel.create(categoryDto);
 
-    return category as Category;
+    return category as CategoryModel;
   }
 
-  public async getCategory(categoryId: string): Promise<Category> {
+  public async getCategory(categoryId: string): Promise<CategoryModel> {
     const category = await this.findCategoryById(categoryId);
 
-    return category as Category;
+    return category as CategoryModel;
   }
 
-  public async getCategories(): Promise<Category[]> {
+  public async getCategories(): Promise<CategoryModel[]> {
     const categories = await this.categoryModel.find();
 
-    return categories as Category[];
+    return categories as CategoryModel[];
   }
 
   public async updateCategory(id: string, categoryDto: CategoryUpdateDto) {

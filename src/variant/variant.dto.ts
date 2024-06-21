@@ -1,6 +1,6 @@
 import { Expose, plainToInstance } from 'class-transformer';
 import { IsNotEmpty, IsNumber } from 'class-validator';
-import { Variant } from './variant.schema';
+import { VariantModel } from './variant.schema';
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 
 @InputType()
@@ -24,7 +24,7 @@ export class VariantDto {
   @Field(() => Int)
   public size: number;
 
-  static fromEntity(entity: Variant): VariantDto {
+  static fromEntity(entity: VariantModel): VariantDto {
     const dto = plainToInstance(VariantDto, entity);
 
     return dto;

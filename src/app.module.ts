@@ -3,9 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ProductModule } from './product/product.module';
-import { CategoryModule } from './category/category.module';
-import { VariantModule } from './variant/variant.module';
+import { ProductModule } from '@product';
+import { CategoryModule } from '@category';
+import { VariantModule } from '@variant';
 
 import configuration from './utils/custom/configuration';
 import { GraphQLModule } from '@nestjs/graphql';
