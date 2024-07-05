@@ -22,7 +22,7 @@ export type ProductDocument = HydratedDocument<ProductModel>;
 
 const ProductSchema = SchemaFactory.createForClass(ProductModel);
 
-// Add index to description
-ProductSchema.index({ description: 'text' });
+// Add
+ProductSchema.index({ description: 'text', title: 'text' });
 
 export { ProductSchema };

@@ -1,4 +1,4 @@
-import { Injectable, UseInterceptors } from '@nestjs/common';
+import { HttpException, Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { FilterQuery, Model } from 'mongoose';
@@ -41,7 +41,7 @@ export class OrderRepository {
 
       return order as OrderModel;
     } catch (error) {
-      throw error;
+      this.handleError(error, this.createOrder.name);
     }
   }
 
@@ -65,7 +65,7 @@ export class OrderRepository {
 
       return result.acknowledged;
     } catch (error) {
-      throw error;
+      this.handleError(error, this.deleteOrder.name);
     }
   }
 
@@ -101,9 +101,7 @@ export class OrderRepository {
 
       return products as OrderModel[];
     } catch (error) {
-      throw new ServerErrorException(
-        `An error occured within ${this.getOrdersByParams.name}: ${error.message}`,
-      );
+      this.handleError(error, this.getOrdersByParams.name);
     }
   }
 
@@ -113,9 +111,7 @@ export class OrderRepository {
 
       return order;
     } catch (error) {
-      throw new ServerErrorException(
-        `An error occured within ${this.findOrderByCondition.name}: ${error.message}`,
-      );
+      this.handleError(error, this.findOrderByCondition.name);
     }
   }
 
@@ -129,13 +125,23 @@ export class OrderRepository {
 
       return order;
     } catch (error) {
-      if (error.name === 'OrderNotFoundException') {
+      this.handleError(error, this.findOrderById.name);
+    }
+  }
+
+  private handleError(
+    error: HttpException | Error,
+    functionName: string,
+  ): void {
+    switch (error.name) {
+      case 'OrderNotFoundException': {
         throw error;
       }
-
-      throw new ServerErrorException(
-        `An error occured within ${this.findOrderById.name}: ${error.message}`,
-      );
+      default: {
+        throw new ServerErrorException(
+          `An error occured within ${functionName}: ${error.message}`,
+        );
+      }
     }
   }
 

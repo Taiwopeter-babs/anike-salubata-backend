@@ -7,7 +7,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { MutationResult } from '@variant/variant.graphql';
+import { MutationResult } from '@shared';
 
 import { ProductService } from './product.service';
 
@@ -41,9 +41,9 @@ export class ProductResolver {
 
   @Mutation(() => ProductDto, { name: 'product' })
   async createProduct(
-    @Args('newProduct', { nullable: false }) product: ProductCreateDto,
+    @Args('newProduct', { nullable: false }) productDto: ProductCreateDto,
   ) {
-    const newProduct = await this.productService.createProduct(product);
+    const newProduct = await this.productService.createProduct(productDto);
 
     return newProduct;
   }
@@ -51,9 +51,9 @@ export class ProductResolver {
   @Mutation(() => MutationResult, { name: 'updateProduct' })
   async updateProduct(
     @Args('id', { nullable: false }) id: string,
-    @Args('product', { nullable: false }) product: ProductUpdateDto,
+    @Args('product', { nullable: false }) productDto: ProductUpdateDto,
   ) {
-    const isUpdated = await this.productService.updateProduct(id, product);
+    const isUpdated = await this.productService.updateProduct(id, productDto);
 
     return { success: isUpdated };
   }

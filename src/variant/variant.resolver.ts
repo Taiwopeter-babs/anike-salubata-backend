@@ -1,7 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { MutationResult, Variant } from './variant.graphql';
+
+import { Variant } from './variant.graphql';
 import { VariantService } from './variant.service';
 import { VariantCreateDto, VariantDto, VariantUpdateDto } from './variant.dto';
+
+import { MutationResult } from '@shared';
 
 @Resolver(() => Variant)
 export class VariantResolver {

@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { MutationResult } from '@variant';
+import { MutationResult } from '@shared';
 import { Category } from './category.grapql';
 import { CategoryService } from './category.service';
 import {

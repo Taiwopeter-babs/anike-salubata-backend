@@ -1,9 +1,7 @@
-import { Injectable, UseInterceptors } from '@nestjs/common';
+import { HttpException, Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProductModel } from './product.schema';
 import mongoose, { FilterQuery, Model } from 'mongoose';
-
-import { RequestParamsDto } from '@shared/dataTransferObjects';
 
 import { ProductCreateDto, ProductUpdateDto } from './product.dto';
 
@@ -43,7 +41,7 @@ export class ProductRepository {
 
       return product as ProductModel;
     } catch (error) {
-      throw error;
+      this.handleError(error, this.createProduct.name);
     }
   }
 
@@ -69,7 +67,7 @@ export class ProductRepository {
 
       // Add search
       if (searchString !== undefined) {
-        filter.$text = { $search: searchString };
+        filter.$text = { $search: searchString, $caseSensitive: false };
       }
 
       const findQuery = this.productModel
@@ -82,9 +80,7 @@ export class ProductRepository {
 
       return products as ProductModel[];
     } catch (error) {
-      throw new ServerErrorException(
-        `An error occured within ${this.getProducts.name}: ${error.message}`,
-      );
+      this.handleError(error, this.getProducts.name);
     }
   }
 
@@ -104,9 +100,7 @@ export class ProductRepository {
 
       return products;
     } catch (error) {
-      throw new ServerErrorException(
-        `An error occured within ${this.getProducts.name}: ${error.message}`,
-      );
+      this.handleError(error, this.getProductsFromIdArray.name);
     }
   }
 
@@ -120,7 +114,7 @@ export class ProductRepository {
 
       return result.acknowledged;
     } catch (error) {
-      throw error;
+      this.handleError(error, this.updateProduct.name);
     }
   }
 
@@ -132,7 +126,7 @@ export class ProductRepository {
 
       return result.acknowledged;
     } catch (error) {
-      throw error;
+      this.handleError(error, this.deleteProduct.name);
     }
   }
 
@@ -145,9 +139,7 @@ export class ProductRepository {
 
       return product;
     } catch (error) {
-      throw new ServerErrorException(
-        `An error occured within ${this.findProductByCondition.name}: ${error.message}`,
-      );
+      this.handleError(error, this.findProductById.name);
     }
   }
 
@@ -161,27 +153,28 @@ export class ProductRepository {
 
       return product;
     } catch (error) {
-      if (error.name === 'ProductNotFoundException') {
-        throw error;
-      }
-
-      throw new ServerErrorException(
-        `An error occured within ${this.findProductById.name}: ${error.message}`,
-      );
+      this.handleError(error, this.findProductById.name);
     }
   }
 
-  private getPageParams(params: RequestParamsDto | null) {
-    if (!params) {
-      return { skip: 0, pageSize: 20 };
+  private handleError(
+    error: HttpException | Error,
+    functionName: string,
+  ): void {
+    switch (error.name) {
+      case 'ProductNotFoundException': {
+        throw error;
+      }
+
+      case 'ProductAlreadyExistsException': {
+        throw error;
+      }
+
+      default: {
+        throw new ServerErrorException(
+          `An error occured within ${functionName}: ${error.message}`,
+        );
+      }
     }
-
-    const pageSize = params.pageSize ?? 20;
-    const pageNumber = params.pageNumber ?? 1;
-
-    return {
-      skip: (pageNumber - 1) * pageSize,
-      pageSize,
-    };
   }
 }

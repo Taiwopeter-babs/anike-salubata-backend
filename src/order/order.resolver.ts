@@ -6,16 +6,15 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { MutationResult } from '@variant/variant.graphql';
+import { MutationResult } from '@shared';
 
 import { OrderCreateDto, OrderDto } from './order.dto';
 import { OrderService } from './order.service';
+import { OrderModel } from './order.schema';
 
-import { ProductDto } from '@product/product.dto';
-import { ProductService } from '@product/product.service';
+import { ProductService, ProductDto } from '@product';
 
 import { RequestParamsDto } from '@shared';
-import { OrderModel } from './order.schema';
 
 @Resolver(() => OrderDto)
 export class OrderResolver {
@@ -52,9 +51,9 @@ export class OrderResolver {
 
   @Mutation(() => OrderDto, { name: 'order' })
   async createOrder(
-    @Args('newOrder', { nullable: false }) order: OrderCreateDto,
+    @Args('newOrder', { nullable: false }) orderDto: OrderCreateDto,
   ) {
-    const newOrder = await this.orderService.createOrder(order);
+    const newOrder = await this.orderService.createOrder(orderDto);
 
     return newOrder;
   }
