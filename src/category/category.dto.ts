@@ -24,6 +24,14 @@ export class CategoryDto {
   @Field()
   public name: string;
 
+  @Expose()
+  @Field()
+  public createdAt: Date;
+
+  @Expose()
+  @Field()
+  public updatedAt: Date;
+
   static fromEntity(entity: CategoryModel): CategoryDto {
     const dto = plainToInstance(CategoryDto, entity);
 

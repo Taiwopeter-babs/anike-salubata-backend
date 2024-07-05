@@ -7,13 +7,20 @@ input CategoryCreateDto {
 }
 
 type CategoryDto {
+  createdAt: DateTime!
   id: String!
   name: String!
+  updatedAt: DateTime!
 }
 
 input CategoryUpdateDto {
   name: String!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 """A custom graphql string"""
 scalar GraphQLString
@@ -42,9 +49,11 @@ input OrderCreateDto {
 }
 
 type OrderDto {
+  createdAt: DateTime!
   id: String!
   products: [ProductDto!]!
   trackingId: String!
+  updatedAt: DateTime!
   userId: String!
 }
 
@@ -57,9 +66,11 @@ input ProductCreateDto {
 
 type ProductDto {
   categories: [GraphQLString!]!
+  createdAt: DateTime!
   description: String!
   id: String!
   title: String!
+  updatedAt: DateTime!
   variants: [Int!]!
 }
 
@@ -94,8 +105,10 @@ input VariantCreateDto {
 }
 
 type VariantDto {
+  createdAt: DateTime!
   id: String!
   size: Int!
+  updatedAt: DateTime!
 }
 
 input VariantUpdateDto {

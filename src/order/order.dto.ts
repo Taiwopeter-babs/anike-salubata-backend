@@ -43,6 +43,14 @@ export class OrderDto {
   public userId: string;
 
   @Expose()
+  @Field()
+  public createdAt: Date;
+
+  @Expose()
+  @Field()
+  public updatedAt: Date;
+
+  @Expose()
   @Field(() => [ProductDto])
   public products: ProductDto[];
 

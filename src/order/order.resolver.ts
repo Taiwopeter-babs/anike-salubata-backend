@@ -26,7 +26,7 @@ export class OrderResolver {
   @Query(() => OrderDto, { name: 'order' })
   async getOrder(@Args('id') id: string) {
     const order = await this.orderService.getOrder(id);
-
+    console.log(order);
     return order;
   }
 
@@ -69,8 +69,17 @@ export class OrderResolver {
   async products(@Parent() order: OrderModel) {
     const { products } = order;
 
+    // remove duplicate product id entries
+    const idSet = new Set<string>();
+
+    products.forEach((productId) => idSet.add(productId));
+
+    const productsIdArray = Array.from(idSet);
+
+    console.log(productsIdArray);
+
     const orderProducts: ProductDto[] =
-      await this.prodService.getProductsFromIdArray(products);
+      await this.prodService.getProductsFromIdArray(productsIdArray);
 
     return orderProducts;
   }

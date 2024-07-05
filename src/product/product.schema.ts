@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 import { BaseSchema } from '../shared/base.schema';
 
-@Schema()
+@Schema({ timestamps: true })
 export class ProductModel extends BaseSchema {
   @Prop({ required: true, index: true })
   title: string;

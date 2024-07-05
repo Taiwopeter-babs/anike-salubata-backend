@@ -119,6 +119,8 @@ export class OrderRepository {
     try {
       const order = await this.orderModel.findById(orderId).exec();
 
+      console.log(order);
+
       if (!order) {
         throw new OrderNotFoundException(orderId);
       }

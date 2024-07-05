@@ -90,6 +90,14 @@ export class ProductDto {
   @Type(() => Number)
   public variants: number[];
 
+  @Expose()
+  @Field()
+  public createdAt: Date;
+
+  @Expose()
+  @Field()
+  public updatedAt: Date;
+
   static fromEntity(entity: ProductModel): ProductDto {
     const dto = plainToInstance(ProductDto, entity, {
       excludeExtraneousValues: true,

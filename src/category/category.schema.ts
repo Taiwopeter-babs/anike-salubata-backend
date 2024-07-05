@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { BaseSchema } from '../shared/base.schema';
 
-@Schema()
+@Schema({ timestamps: true })
 export class CategoryModel extends BaseSchema {
   @Prop({ index: true })
   name: string;

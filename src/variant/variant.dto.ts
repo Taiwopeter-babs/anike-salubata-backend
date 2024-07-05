@@ -24,6 +24,14 @@ export class VariantDto {
   @Field(() => Int)
   public size: number;
 
+  @Expose()
+  @Field()
+  public createdAt: Date;
+
+  @Expose()
+  @Field()
+  public updatedAt: Date;
+
   static fromEntity(entity: VariantModel): VariantDto {
     const dto = plainToInstance(VariantDto, entity);
 
